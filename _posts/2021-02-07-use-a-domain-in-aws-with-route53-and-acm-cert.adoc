@@ -1,6 +1,7 @@
 = Use a domain in AWS with Route53 and ACM Certificate
 :page-layout: post
 :page-excerpt: Use a domain bought in a third part company in AWS with Route53 and ACM Certificate.
+:page-description: Use a domain bought in a third part company in AWS with Route53 and ACM Certificate.
 :page-root: ../../../
 :page-liquid:
 :page-permalink: use-a-domain-in-aws-with-route53-and-acm-cert

@@ -1,0 +1,109 @@
+=  Deploy React to S3 and CloudFront using Terraform
+:page-layout: post
+:page-excerpt: Deploy React site to S3 and Cloud Front using Terraform.
+:page-root: ../../../
+:page-liquid:
+:page-permalink: deploying-react-to-s3-using-terraform
+:page-categories: [technical]
+:toc:
+:toc-title: Contents
+
+== Background
+
+Deploying your website to a Content Delivery Network can improve how fast your site loads, specially the first time. CloudFront can be used as part of link:https://aws.amazon.com/free/?all-free-tier.sort-by=item.additionalFields.SortRank&all-free-tier.sort-order=asc&all-free-tier.q=cloudfront&all-free-tier.q_operator=AND[AWS Free Tier].
+
+I use AWS and Terraform extensively to deploy my infrastructure and I needed to deploy a small one page React site. So it felt natural to reuse tools.
+
+My initial thought was Terraform was not great to deploy the code as every change in the code will mutate the state even if the infrastructure didn't change. But I realised I could consider my code state part of the infrastructure, that wouldn't break any good practise, would it?
+
+== Requirements
+
+.Software needed:
+* link:https://learn.hashicorp.com/tutorials/terraform/install-cli[Terraform (tested on 0.14.3)]
+* link:https://github.com/nvm-sh/nvm#usage[Npm (tested on v6.14.6)]
+* link:https://github.com/nvm-sh/nvm#usage[Nodejs (tested on v12.18.3)]
+
+.Other requirements:
+* AWS account.
+* AWS credentials in set up in `~/.aws/credentials`.
+* An Route53 Zone Id for the domain name you will use.
+* A certificate ARN for that domain name.
+
+== Setting up the basics
+
+I had a running React Single Page Application I created using link:https://create-react-app.dev/docs/getting-started/[Create React App]. When you run `npm build` a directory called `build` is generated containing all files to run the app. Those files need to be served for the app to run.
+
+In the project root I created a directory called infra where I initialised my Terraform project and configure its backend. In a different project I created a link:https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route53_zone[Route53 Public Hosted Zone] for the domain I wanted to use and an link:https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/acm_certificate[ACM Certificate] in the North Virginia Region for it. I might write another post on how to do that. That's all is needed to start working.
+
+== Creating the CDN
+
+Next thing to do is to do is create the CDN infrastructure together with the S3 bucket we'll use to deploy our static files. To do that one of the simplest ways it to use link:https://github.com/cloudposse/terraform-aws-cloudfront-s3-cdn[this module] created by link:https://cloudposse.com/[Cloud Posse].
+
+.Create CDN
+[source,hcl]
+----
+variable "domain" {
+  default     = "example.com"
+  description = "Your domain"
+}
+
+variable "cert_arn" {
+  default     = "arn:aws:acm:us-east-1:<your-account-numer>:certificate/<cert-id>"
+  description = "The arn of the certificate you generated for you domain"
+}
+
+# Retrieve the Hosted Zone for your domain
+data "aws_route53_zone" "selected" {
+  name = var.domain
+}
+
+module "cloudfront_s3_cdn" {
+  source                   = "git::https://github.com/cloudposse/terraform-aws-cloudfront-s3-cdn.git?ref=tags/0.39.0" # specific version you want to use
+  namespace                = "acm"
+  stage                    = terraform.workspace
+  name                     = "single-page-app"
+  parent_zone_id           = data.aws_route53_zone.selected.zone_id
+  aliases                  = ["search.${var.domain}"]
+  acm_certificate_arn      = var.cert_arn
+  use_regional_s3_endpoint = true
+  origin_force_destroy     = true
+  cors_allowed_headers     = ["*"]
+  cors_allowed_methods     = ["GET", "HEAD", "PUT"]
+  cors_allowed_origins     = ["*.${var.domain}"]
+  cors_expose_headers      = ["ETag"]
+}
+----
+
+== Uploading the files
+
+That module creates everything necessary to deploy a static site to S3 and have it served via CloudFront. The module exports the bucket where the site can be uploaded as output with the name `s3_bucket`.
+
+S3 requires us to set up the proper content type to be able to serve the site correctly. To address that a good option is to use https://github.com/hashicorp/terraform-template-dir[terraform-template-dir] module and a `for_each` function as in the code snippet.
+
+.Upload files
+[source,hcl]
+----
+module "dir" {
+  source   = "hashicorp/dir/template"
+  version  = "1.0.2"
+  base_dir = "../build" # path to your static site
+}
+
+resource "aws_s3_bucket_object" "site" {
+  for_each     = module.dir.files
+
+  bucket       = module.cloudfront_s3_cdn.s3_bucket # refers to the previous snippet
+  key          = each.key
+  content_type = each.value.content_type
+  source       = "../build/${each.value.source_path}"
+  etag         = filemd5("../build/${each.value.source_path}")
+}
+----
+
+Everywhere `../build` is used a path to your static site should be used instead. I normally store my terraform project in a directory in the project, so I have to use `..` to go to the root of the project.
+
+`filemd5` function is used to ensure that only files that have changed will be uploaded, if they remain the change `terraform plan` will show no changes.
+
+== Wrap up
+
+Once everything is assembled together when anything changes in the `build` directory as a consequence of a change in the site code it will be deployed by terraform using `terraform apply`.

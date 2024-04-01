@@ -2,4 +2,4 @@
 :page-title: Technical
 :page-category: technical
 
-Technical articles. Solving problems I've experienced or came across my path I consider interesting.
+Technical articles. Solving problems I've experienced or came across my path and I consider interesting.

@@ -16,5 +16,6 @@ I'm a Software Engineer located in Europe. I've worked as backend in several com
 
 .I have several reasons to start blogging:
 * I have received a lot from the community and want to give back.
+* I solve many problems that I find several times, I want a single place to group them together and be able to remember in the future.
 * I find it easy to describe a problem orally, I struggle a bit writing as it consumes more of my time.
-* I wanted a platform to share what I haven't been able to find in the Internet with my own rules.
+* I wanted a platform to share what I haven't been able to find in the Internet and I want to have my own rules.

@@ -1,5 +1,5 @@
 title: I am ACM
-description: BLOG DESCRIPTION
+description: Technical Blog of ACM
 exclude:
   - Gemfile
   - Gemfile.lock

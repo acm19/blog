@@ -1,10 +1,9 @@
-=  Deploy React to S3 and CloudFront using Terraform
+= Use a domain in AWS with Route53 and ACM Certificate
 :page-layout: post
-:page-excerpt: Deploy React site to S3 and Cloud Front using Terraform.
-:page-description: Deploy React site to S3 and Cloud Front using Terraform.
+:page-excerpt: Use a domain bought in a third part company in AWS with Route53 and ACM Certificate.
 :page-root: ../../../
 :page-liquid:
-:page-permalink: deploying-react-to-s3-using-terraform
+:page-permalink: use-a-domain-in-aws-with-route53-and-acm-cert
 :page-categories: [technical]
 :toc:
 :toc-title: Contents

@@ -8,6 +8,10 @@
 
 `acm` is my login user, I have certain attachment to it.
 
+== Why the domain?
+
+`owlshare.io` is a personal project. It also motivated me to start blogging, so I decided to use this domain for the blog, at least initially.
+
 == Who are you?
 
 I'm a Software Engineer located in Europe. I've worked as backend in several companies. I also have plenty of experience with infrastructure. In my free time I work on my side projects as full stack, which I really enjoy. Finally, I love climbing.

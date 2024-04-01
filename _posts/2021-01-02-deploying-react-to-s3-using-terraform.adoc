@@ -11,7 +11,7 @@
 
 == Background
 
-Deploying your website to a Content Delivery Network can improve how fast your site loads, specially the first time. CloudFront can be used as part of link:https://aws.amazon.com/free/?all-free-tier.sort-by=item.additionalFields.SortRank&all-free-tier.sort-order=asc&all-free-tier.q=cloudfront&all-free-tier.q_operator=AND[AWS Free Tier].
+Deploying your website to a Content Delivery Network can improve how fast your site loads, specially the first time the site is visited. CloudFront can be used as part of link:https://aws.amazon.com/free/[AWS Free Tier].
 
 I use AWS and Terraform extensively to deploy my infrastructure and I needed to deploy a small one page React site. So it felt natural to reuse tools.
 
@@ -20,15 +20,15 @@ My initial thought was Terraform was not great to deploy the code as every chang
 == Requirements
 
 .Software needed:
-* link:https://learn.hashicorp.com/tutorials/terraform/install-cli[Terraform (tested on 0.14.3)]
+* link:https://learn.hashicorp.com/tutorials/terraform/install-cli[Terraform (tested on 0.14.5)]
 * link:https://github.com/nvm-sh/nvm#usage[Npm (tested on v6.14.6)]
 * link:https://github.com/nvm-sh/nvm#usage[Nodejs (tested on v12.18.3)]
 
 .Other requirements:
 * AWS account.
 * AWS credentials in set up in `~/.aws/credentials`.
-* An Route53 Zone Id for the domain name you will use.
-* A certificate ARN for that domain name.
+* An link:use-a-domain-in-aws-with-route53-and-acm-cert#creating_the_hosted_zone[Route53 Zone Id] for the domain name you will use.
+* A link:use-a-domain-in-aws-with-route53-and-acm-cert#creating_and_validating_the_certificate[certificate ARN] for that domain name.
 
 == Setting up the basics
 

@@ -1,0 +1,130 @@
+= Use a domain in AWS with Route53 and ACM Certificate
+:page-layout: post
+:page-excerpt: Use a domain bought in a third part company in AWS with Route53 and ACM Certificate.
+:page-root: ../../../
+:page-liquid:
+:page-permalink: use-a-domain-in-aws-with-route53-and-acm-cert
+:page-categories: [technical]
+:toc:
+:toc-title: Contents
+
+== Background
+
+It's very common to buy domains from a registrar company like https://www.namecheap.com/[Namecheap] or https://www.godaddy.com[GoDaddy]. It is possible to use those domains in AWS and keep using your favourite registrar. Terraform is a great tool to automate this process.
+
+This post describes how to use Terraform to register a domain registered outside of AWS and emit a valid certificate to be used by a Cloud Front CDN or other services.
+
+Please bear in mind, this tutorial uses a Route53 Hosted Zone which is not included as part of https://aws.amazon.com/free/[Amazon Free Tier], everything else described below is included in the Free Tier. Consult the price of Hosted Zones https://aws.amazon.com/route53/pricing/[here].
+
+== Requirements
+
+.Software needed:
+* link:https://learn.hashicorp.com/tutorials/terraform/install-cli[Terraform (tested on 0.14.3)]
+
+.Other requirements:
+* AWS account.
+* AWS credentials in set up in `~/.aws/credentials`.
+
+== Setting up the providers
+
+CloudFront https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cnames-and-https-requirements.html#https-requirements-aws-region[requires your certificate to be issued in US East (North Virginia) region]. If you need to deploy to a different region you will need two `aws` providers. In this example EU West (Ireland) will be used for the Hosted Zone:
+
+.Define providers
+[source,hcl]
+----
+provider "aws" {
+  region  = "eu-west-1"
+}
+
+provider "aws" {
+  region  = "us-east-1"
+  alias   = "virginia"
+}
+----
+
+== Creating the Hosted Zone
+
+It's a good idea to define the domain in a https://www.terraform.io/docs/language/values/locals.html[local] to reuse it easily. The hosted zone can be declared right after that as well:
+
+.Hosted Zone
+[source,hcl]
+----
+locals {
+  domain = "example.com"
+}
+
+resource "aws_route53_zone" "zone" {
+  name          = local.domain
+  force_destroy = true
+}
+
+output "name_servers" {
+  value = aws_route53_zone.zone.name_servers
+}
+----
+
+Running `terraform apply` successfully will display a list of name servers as output:
+
+.Hosted Zone outputs
+[source,hcl]
+----
+name_servers = tolist([
+  "ns-5687.awsdns-79.org",
+  "ns-2035.awsdns-56.co.uk",
+  "ns-868.awsdns-12.com",
+  "ns-557.awsdns-47.net",
+])
+----
+
+Those values should be registered as custom domains in the registrar where the domain was bought. There is plenty of information on how to do that for a specific registrar, it's certainly out of scope for this article.
+
+[TIP]
+====
+Depending on whether the selected registrar has a Terraform provider supporting Custom Domains it could be possible to automate the manual registrations step.
+====
+
+== Creating and Validating the Certificate
+
+Once the Hosted Zone is created and the custom domain registered on the registrar, it's time to create and validate the certificate. For that, DNS validation will be used, it will work because Route53 is already being used to manage the domain.
+
+First step is to register the certificate using the North Virginia provider. Then, https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/acm_certificate_validation[`aws_acm_certificate_validation`] can be used along with https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route53_record[`aws_route53_record`] to create the validation records and wait until AWS validates the ownership of the certificate.
+
+.Certificate definition and validation
+[source,hcl]
+----
+resource "aws_acm_certificate" "cert" {
+  domain_name       = "*.${local.domain}"
+  validation_method = "DNS"
+  provider          = aws.virginia
+
+  lifecycle {
+    create_before_destroy = true
+  }
+}
+
+resource "aws_route53_record" "cert_validation" {
+  for_each = {
+    for dvo in aws_acm_certificate.cert.domain_validation_options : dvo.domain_name => {
+      name   = dvo.resource_record_name
+      record = dvo.resource_record_value
+      type   = dvo.resource_record_type
+    }
+  }
+
+  name    = each.value.name
+  type    = each.value.type
+  records = [each.value.record]
+  zone_id = aws_route53_zone.zone.id
+  ttl     = 60
+}
+
+resource "aws_acm_certificate_validation" "cert" {
+  certificate_arn         = aws_acm_certificate.cert.arn
+  validation_record_fqdns = [for record in aws_route53_record.cert_validation : record.fqdn]
+  provider                = aws.virginia
+}
+----
+
+== Wrap up
+
+At this point, once `terraform apply` returns successfully a certificate will be created and ready to use. The Hosted Zone is also ready to add more records and be used to manage all of our domains needs.

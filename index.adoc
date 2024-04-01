@@ -1,0 +1,13 @@
+= Title
+:showtitle:
+:page-title: Page Title
+:page-description: Short desc
+:page-liquid:
+
+== Title 1
+
+Some stuff.
+
+== Title 2
+
+Some other stuff.

@@ -1,13 +1,20 @@
-= Title
+= I am ACM
 :showtitle:
-:page-title: Page Title
-:page-description: Short desc
+:page-title: I am ACM
+:page-description: Technical Blog of ACM
 :page-liquid:
 
-== Title 1
+== Why the name?
 
-Some stuff.
+`acm` is my login user, I have certain attachment to it.
 
-== Title 2
+== Who are you?
 
-Some other stuff.
+I'm a Software Engineer located in Europe. I've worked as backend in several companies. I also have plenty of experience with infrastructure. In my free time I work on my side projects as full stack, which I really enjoy. Finally, I love climbing.
+
+== Why are you writing this blog?
+
+.I have several reasons to start blogging:
+* I have received a lot from the community and want to give back.
+* I find it easy to describe a problem orally, I struggle a bit writing as it consumes more of my time.
+* I wanted a platform to share what I haven't been able to find in the Internet with my own rules.

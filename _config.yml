@@ -1,9 +1,10 @@
-title: I AM ACM
+title: I am ACM
 description: BLOG DESCRIPTION
 exclude:
   - Gemfile
   - Gemfile.lock
   - .idea
+  - Makefile
 asciidoc: {}
 asciidoctor:
   base_dir: :docdir

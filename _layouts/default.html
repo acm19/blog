@@ -1,6 +1,5 @@
 <!doctype html>
-<!--[if IE 9]>
-<html class="lt-ie10" lang="en"> <![endif]-->
+<!--[if IE 9]><html class="lt-ie10" lang="en"> <![endif]-->
 <html class="no-js" lang="en" data-useragent="Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.2; Trident/6.0)">
     <head>
         <meta charset="utf-8">
@@ -8,8 +7,6 @@
         <title>{{page.title}}</title>
         <meta name="description"
               content="{% if page.description %}{{ page.description }}{% else %}{{ site.description }}{% endif %}">
-        <meta name="author" content="Your name goes here">
-        <meta name="copyright" content="Maybe consider a Creative Commons license">
         <link rel="stylesheet" href="{{page.root}}css/foundation.css">
         <link rel="stylesheet" href="{{page.root}}css/font-awesome.css">
         <link rel="stylesheet" href="{{page.root}}css/coderay.css">
@@ -34,16 +31,13 @@
         </nav>
         <!-- End Nav -->
 
-
         <!-- Main Page Content and Sidebar -->
         <div class="row">
             <!-- Main Blog Content -->
             <div class="large-9 columns" role="content">
-
                 {{ content }}
 
                 <h2>Last 3 posts</h2>
-
                 <ul>
                     {% for post in site.posts limit: 3 %}
                         <li><a href=".{{ post.url }}">{{ post.title }}</a></li>
@@ -64,18 +58,16 @@
             </aside>
             <!-- End Sidebar -->
         </div>
-
         <!-- End Main Content and Sidebar -->
 
         <script src="{{page.root}}js/vendor/jquery.js"></script>
         <script src="{{page.root}}js/foundation.min.js"></script>
         <script>
-        $(document).foundation();
-        var doc = document.documentElement;
-        doc.setAttribute('data-useragent', navigator.userAgent);
-
-
+            $(document).foundation();
+            var doc = document.documentElement;
+            doc.setAttribute('data-useragent', navigator.userAgent);
         </script>
+
         <!-- Google Analytics -->
         <!-- <script>
         (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -86,6 +78,6 @@
         ga('create', 'UA-ANALYTICS-KEY', 'auto');
         ga('send', 'pageview'); -->
         <!-- End Google Analytics -->
-        </script>
+        <!-- </script>-->
     </body>
 </html>

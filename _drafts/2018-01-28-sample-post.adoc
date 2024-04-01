@@ -1,5 +1,4 @@
 =  Post sample
-:showtitle:
 :page-layout: post
 :page-navtitle: sample
 :page-excerpt: Excerpt goes here.

@@ -6,7 +6,7 @@
 :page-root: ../../../
 :page-liquid:
 :page-permalink: draft-permalink
-:page-categories: [dev]
+:page-categories: [technical]
 
 == WIP
 

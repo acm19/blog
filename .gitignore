@@ -2,7 +2,6 @@
 /.bundle/
 /tmp/
 *.bundle
-Gemfile.lock
 site.tar
 .idea
 .jekyll-cache

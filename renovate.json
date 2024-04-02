@@ -1,0 +1,13 @@
+{
+  "extends": [
+    "config:recommended",
+    "group:all",
+    ":disableDependencyDashboard"
+  ],
+  "packageRules": [
+    {
+      "matchPackageNames": ["com.puppycrawl.tools:checkstyle"],
+      "allowedVersions": "<=9.3"
+    }
+  ]
+}

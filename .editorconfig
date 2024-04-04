@@ -1,5 +1,3 @@
-# EditorConfig is awesome: https://editorconfig.org/
-
 # top-most EditorConfig file
 root = true
 
@@ -12,3 +10,7 @@ end_of_line = lf
 charset = utf-8
 insert_final_newline = true
 max_line_length = 100
+
+[{Makefile,**.mk}]
+# Use tabs for indentation (Makefiles require tabs)
+indent_style = tab

@@ -1,7 +1,5 @@
 /_site/
 /.bundle/
-/tmp/
-*.bundle
 site.tar
 .idea
 .jekyll-cache

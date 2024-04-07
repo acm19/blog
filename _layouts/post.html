@@ -8,13 +8,13 @@
     <title>{{page.title}}</title>
     <meta name="description"
           content="{% if page.description %}{{ page.description }}{% else %}{{ site.description }}{% endif %}">
-    <link rel="stylesheet" href="{{page.root}}css/foundation.css">
-    <link rel="stylesheet" href="{{page.root}}css/font-awesome.css">
-    <link rel="stylesheet" href="{{page.root}}css/coderay.css">
-    <link rel="stylesheet" href="{{page.root}}css/asciidoctor.css">
-    <link rel="stylesheet" href="{{page.root}}css/dark.css">
-    <script src="{{page.root}}js/vendor/modernizr.js"></script>
-    <script src="{{page.root}}js/toc.js"></script>
+    <link rel="stylesheet" href="{{ site.url }}/css/foundation.css">
+    <link rel="stylesheet" href="{{ site.url }}/css/font-awesome.css">
+    <link rel="stylesheet" href="{{ site.url }}/css/coderay.css">
+    <link rel="stylesheet" href="{{ site.url }}/css/asciidoctor.css">
+    <link rel="stylesheet" href="{{ site.url }}/css/dark.css">
+    <script src="{{ site.url }}/js/vendor/modernizr.js"></script>
+    <script src="{{ site.url }}/js/toc.js"></script>
 
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-3RW62DZWBG"></script>
@@ -34,7 +34,7 @@
         <!-- Title Area -->
         <li class="name">
           <h1>
-            <a href="{{page.root}}">{{site.title}}</a>
+            <a href="{{ site.url }}/">{{site.title}}</a>
           </h1>
         </li>
         <li class="toggle-topbar menu-icon"><a href="#"><span>Menu</span></a></li>
@@ -118,14 +118,14 @@
         <hr>
         <div class="row">
           <div class="large-12 columns">
-            <p><a href="{{page.root}}">Back home</a></p>
+            <p><a href="{{ site.url }}/">Back home</a></p>
           </div>
         </div>
       </div>
     </footer>
 
-    <script src="{{page.root}}js/vendor/jquery.js"></script>
-    <script src="{{page.root}}js/foundation.min.js"></script>
+    <script src="{{ site.url }}/js/vendor/jquery.js"></script>
+    <script src="{{ site.url }}/js/foundation.min.js"></script>
     <script>
       $(document).foundation();
       var doc = document.documentElement;

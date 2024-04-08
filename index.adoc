@@ -19,3 +19,7 @@ I'm a Software Engineer located in Europe. I've worked as backend in several com
 * I solve many problems that I find several times, I want a single place to group them together and be able to remember in the future.
 * I find it easy to describe a problem orally, I struggle a bit writing as it consumes more of my time.
 * I wanted a platform to share what I haven't been able to find in the Internet and I want to have my own rules.
+
+== Disclaimer
+
+Opinions expressed are solely my own and do not express the views or opinions of my employer.
